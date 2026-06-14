@@ -24,52 +24,46 @@ A complete, production-ready web application designed for managing shared flatma
 
 ## 2. Tech Stack
 
-- **Frontend**: React (Vite), React Router, Tailwind CSS, Axios, PapaParse
-- **Backend**: Node.js, Express.js, Sequelize ORM, MySQL (XAMPP), Multer
-- **Database**: MySQL (relational, fully normalized)
+* **Frontend:** React.js (Vite), React Router, Tailwind CSS, Axios, PapaParse
+* **Backend:** Node.js, Express.js, Sequelize ORM, Multer
+* **Database:** PostgreSQL (Production) / MySQL (Production/Local) / SQLite (Local)
+* **Hosting & DevOps:** 
+  * **GitHub** (Version Control & CI/CD source)
+  * **Vercel** (Frontend static hosting)
+  * **Railway** (Backend server hosting & Managed PostgreSQL Database)
 
 ---
 
 ## 3. Getting Started & Installation
 
 ### Prerequisites
-1. **Node.js** (v16+)
-2. **XAMPP** (with MySQL and Apache running)
+1. **Node.js** (v18+)
+2. **PostgreSQL** or **MySQL** (or fallback to local SQLite)
 
-### Database Setup in XAMPP
-1. Open the XAMPP Control Panel and start **Apache** and **MySQL**.
-2. Click **Admin** next to MySQL to open `phpMyAdmin` (or go to `http://localhost/phpmyadmin`).
-3. Click the **SQL** tab and run the following command to create the database:
-   ```sql
-   CREATE DATABASE IF NOT EXISTS `shared_expenses` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+### Database Setup
+The application dynamically adapts to your database configuration based on the `DATABASE_URL` or `MYSQL_URL` connection strings:
+* **PostgreSQL:** Set `DB_DIALECT=postgres` and provide a `DATABASE_URL`.
+* **MySQL:** Set `DB_DIALECT=mysql` and provide a `MYSQL_URL` (or standard credentials).
+* **SQLite:** Set `DB_DIALECT=sqlite` (great for quick zero-setup local runs).
+
+### Installation & Run Steps
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/vikashgupta9752/splitrent.git
+   cd splitrent
    ```
-
-### Backend Installation
-1. Navigate to the backend directory:
+2. **Run Backend:**
    ```bash
    cd backend
-   ```
-2. Install dependencies:
-   ```bash
    npm install
+   # Create a .env file (see Configuration below)
+   npm start
    ```
-3. Create a `.env` file in the `backend/` directory (see configurations below).
-4. Run the backend server in development mode:
-   ```bash
-   npm run dev
-   ```
-
-### Frontend Installation
-1. Navigate to the frontend directory:
+3. **Run Frontend:**
    ```bash
    cd ../frontend
-   ```
-2. Install dependencies:
-   ```bash
    npm install
-   ```
-3. Run the React development server:
-   ```bash
+   # Create a .env file (see Configuration below)
    npm run dev
    ```
 
@@ -83,56 +77,79 @@ Create a `.env` file in `backend/` with the following variables:
 PORT=5000
 NODE_ENV=development
 
-# Database Settings
-DB_NAME=shared_expenses
-DB_USER=root
-DB_PASS=
-DB_HOST=127.0.0.1
-DB_PORT=3306
+# Database Settings (PostgreSQL example)
+DB_DIALECT=postgres
+DATABASE_URL=postgresql://postgres:password@host:port/database
 
 # JWT Configuration
-JWT_SECRET=super_secret_key_change_in_production
+JWT_SECRET=your_super_secret_jwt_key
 JWT_EXPIRE=30d
 ```
 
 ### Frontend Configuration (`frontend/.env`)
-Vite environment variables should be set in `frontend/.env`:
+Set the backend API entrypoint:
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
 ---
 
-## 5. API Documentation
+## 5. Cloud Deployment Architecture
+
+The production environment is split across Vercel and Railway for optimal scalability:
+
+```mermaid
+graph LR
+    Vercel[Vercel: React Frontend] -->|API Calls| RailwayServer[Railway: Express Backend]
+    RailwayServer -->|Sequelize ORM| RailwayDB[(Railway: Managed PostgreSQL)]
+```
+
+* **Frontend:** Hosted on Vercel at [splitrent-three.vercel.app](https://splitrent-three.vercel.app). It incorporates a zero-configuration fallback to the production backend URL when built for production.
+* **Backend:** Hosted on Railway at [todo-list-production-2020.up.railway.app](https://todo-list-production-2020.up.railway.app), running on Node 22.
+* **Database:** Hosted on Railway using a managed, high-performance PostgreSQL database.
+
+---
+
+## 6. AI Development & Agentic Coding
+This project was successfully reviewed, refactored, and deployed in collaboration with **Antigravity**, an advanced agentic AI coding assistant developed by Google DeepMind.
+
+**AI Contributions:**
+* **PostgreSQL Migration:** Refactored the database engine in `backend/config/db.js` to dynamically support both PostgreSQL and MySQL connection dialects with automatic SSL handling.
+* **Deployment Optimization:** Fixed deployment crashes by identifying start command incompatibilities (`./run.sh` vs `npm start`) on Railway and rewriting production fallbacks.
+* **Git and Remote Coordination:** Handled local updates, staged changes, and pushed code to GitHub repositories.
+
+---
+
+## 7. API Documentation
 
 All routes are prefixed with `/api`.
 
 ### Auth Routes
-- `POST /auth/register`: Register a new user account.
-- `POST /auth/login`: Authenticate a user and receive a JWT token.
-- `POST /auth/logout`: Invalidate user session.
-- `GET /auth/me`: Get current logged-in user details.
+* `POST /auth/register`: Register a new user account.
+* `POST /auth/login`: Authenticate a user and receive a JWT token.
+* `POST /auth/logout`: Invalidate user session.
+* `GET /auth/me`: Get current logged-in user details.
 
 ### Group Routes
-- `GET /groups`: List all groups the logged-in user belongs to.
-- `POST /groups`: Create a new expense group.
-- `GET /groups/:id`: Get detailed group info (including members and balances).
-- `POST /groups/:id/members`: Add a new member (registered user or guest) with join/leave dates.
-- `PUT /groups/:id/members/:memberId`: Edit member details (name, join/leave dates).
+* `GET /groups`: List all groups the logged-in user belongs to.
+* `POST /groups`: Create a new expense group.
+* `GET /groups/:id`: Get detailed group info (including members and balances).
+* `POST /groups/:id/members`: Add a new member (registered user or guest) with join/leave dates.
+* `PUT /groups/:id/members/:memberId`: Edit member details (name, join/leave dates).
 
 ### Expense Routes
-- `GET /groups/:groupId/expenses`: List all expenses in a group.
-- `POST /groups/:groupId/expenses`: Add a new expense (with splits).
-- `PUT /expenses/:id`: Update an expense.
-- `DELETE /expenses/:id`: Delete an expense.
+* `GET /groups/:groupId/expenses`: List all expenses in a group.
+* `POST /groups/:groupId/expenses`: Add a new expense (with splits).
+* `PUT /expenses/:id`: Update an expense.
+* `DELETE /expenses/:id`: Delete an expense.
 
 ### Settlement Routes
-- `GET /groups/:groupId/settlements`: List all settlements in a group.
-- `POST /groups/:groupId/settlements`: Record a new settlement between two members.
+* `GET /groups/:groupId/settlements`: List all settlements in a group.
+* `POST /groups/:groupId/settlements`: Record a new settlement between two members.
 
 ### Import / CSV Routes
-- `POST /groups/:groupId/import/upload`: Upload an `expenses_export.csv` file using Multer. Returns the import report and parsed anomalies list.
-- `GET /groups/:groupId/import/reports`: Fetch historical import reports.
-- `GET /import/reports/:reportId/anomalies`: Get list of anomalies for a report.
-- `POST /import/anomalies/:anomalyId/resolve`: Resolve an anomaly (e.g. approve duplicate, edit raw data, or ignore).
-- `POST /import/reports/:reportId/commit`: Finalize the import after resolving anomalies, writing valid rows to Expenses/Settlements.
+* `POST /groups/:groupId/import/upload`: Upload an `expenses_export.csv` file using Multer. Returns the import report and parsed anomalies list.
+* `GET /groups/:groupId/import/reports`: Fetch historical import reports.
+* `GET /import/reports/:reportId/anomalies`: Get list of anomalies for a report.
+* `POST /import/anomalies/:anomalyId/resolve`: Resolve an anomaly (e.g. approve duplicate, edit raw data, or ignore).
+* `POST /import/reports/:reportId/commit`: Finalize the import after resolving anomalies, writing valid rows to database.
