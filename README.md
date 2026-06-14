@@ -1,6 +1,6 @@
 # Shared Expenses Manager
 
-A complete, production-ready web application designed for managing shared flatmate expenses. It implements a clean, modular architecture using **React.js** (frontend) and **Node.js, Express.js, MySQL (via XAMPP)** (backend). It features dynamic membership history tracking, multiple currency support (INR/USD), a robust debt simplification engine, and a CSV import module with automated anomaly detection.
+A complete, production-ready web application designed for managing shared flatmate expenses. It implements a clean, modular architecture using **React.js** (frontend) and **Node.js, Express.js, PostgreSQL/MySQL** (backend). It features dynamic membership history tracking, multiple currency support (INR/USD), a robust debt simplification engine, and a CSV import module with automated anomaly detection.
 
 ---
 
