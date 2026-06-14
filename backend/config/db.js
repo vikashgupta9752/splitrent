@@ -6,7 +6,21 @@ const dialect = process.env.DB_DIALECT || 'mysql';
 
 let sequelize;
 
-if (dialect === 'sqlite') {
+if (process.env.DATABASE_URL || process.env.MYSQL_URL) {
+  const connectionString = process.env.DATABASE_URL || process.env.MYSQL_URL;
+  console.log('Initializing Sequelize with Connection URL...');
+  sequelize = new Sequelize(connectionString, {
+    dialect: 'mysql',
+    logging: process.env.NODE_ENV === 'development' ? (msg) => console.log(`[Sequelize] ${msg}`) : false,
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    },
+    timezone: '+05:30'
+  });
+} else if (dialect === 'sqlite') {
   console.log('Initializing Sequelize with SQLite...');
   sequelize = new Sequelize({
     dialect: 'sqlite',
