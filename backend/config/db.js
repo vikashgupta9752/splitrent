@@ -11,6 +11,7 @@ if (process.env.DATABASE_URL || process.env.MYSQL_URL) {
   console.log('Initializing Sequelize with Connection URL...');
   sequelize = new Sequelize(connectionString, {
     dialect: 'mysql',
+    dialectModule: require('mysql2'),
     logging: process.env.NODE_ENV === 'development' ? (msg) => console.log(`[Sequelize] ${msg}`) : false,
     pool: {
       max: 5,
@@ -36,6 +37,7 @@ if (process.env.DATABASE_URL || process.env.MYSQL_URL) {
       host: process.env.DB_HOST || '127.0.0.1',
       port: process.env.DB_PORT || 3306,
       dialect: 'mysql',
+      dialectModule: require('mysql2'),
       logging: process.env.NODE_ENV === 'development' ? (msg) => console.log(`[Sequelize] ${msg}`) : false,
       pool: {
         max: 5,
