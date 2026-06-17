@@ -5,7 +5,7 @@ const baseURL = isDev
   ? (import.meta.env.VITE_API_URL || 'http://localhost:5000/api')
   : (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('localhost')
       ? import.meta.env.VITE_API_URL
-      : 'https://todo-list-production-2020.up.railway.app/api');
+      : 'https://api.splitrent.com/api');
 
 const API = axios.create({
   baseURL,

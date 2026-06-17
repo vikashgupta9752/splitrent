@@ -105,7 +105,7 @@ graph LR
 ```
 
 * **Frontend:** Hosted on Vercel at [splitrent-three.vercel.app](https://splitrent-three.vercel.app). It incorporates a zero-configuration fallback to the production backend URL when built for production.
-* **Backend:** Hosted on Railway at [todo-list-production-2020.up.railway.app](https://todo-list-production-2020.up.railway.app), running on Node 22.
+* **Backend:** Hosted on Railway at [api.splitrent.com](https://api.splitrent.com), running on Node 22.
 * **Database:** Hosted on Railway using a managed, high-performance PostgreSQL database.
 
 ---
