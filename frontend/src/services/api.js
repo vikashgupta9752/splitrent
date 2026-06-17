@@ -33,8 +33,8 @@ API.interceptors.response.use((response) => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     // Soft redirect if not on login page
-    if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
-      window.location.href = '/login?expired=true';
+    if (!window.location.hash.includes('/login') && !window.location.hash.includes('/register')) {
+      window.location.hash = '#/login?expired=true';
     }
   }
   return Promise.reject(error);
