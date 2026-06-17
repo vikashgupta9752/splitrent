@@ -9,5 +9,12 @@
       "entrypoint": "backend/api/index.js",
       "routePrefix": "/_/backend"
     }
-  }
+  },
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/((?!api/|_/).*)",
+      "destination": "/index.html"
+    }
+  ]
 }
