@@ -11,10 +11,13 @@
     }
   },
   "cleanUrls": true,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/((?!api/|_/).*)",
-      "destination": "/index.html"
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
