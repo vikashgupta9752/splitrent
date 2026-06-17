@@ -1,31 +1,18 @@
 {
-  "experimentalServices": {
-    "frontend": {
-      "root": "frontend",
-      "routePrefix": "/",
-      "framework": "vite"
-    },
-    "backend": {
-      "entrypoint": "backend/api/index.js",
-      "routePrefix": "/_/backend"
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
-  },
+  ],
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/login",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/register",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/dashboard",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/groups/:id*",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
