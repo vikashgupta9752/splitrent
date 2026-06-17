@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       return { success: true };
     } catch (error) {
-      const message = error.response?.data?.message || 'Login failed. Please check credentials.';
+      const message = error.response?.data?.message || error.message || 'Login failed. Please check credentials.';
       return { success: false, message };
     }
   };
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       return { success: true };
     } catch (error) {
-      const message = error.response?.data?.message || 'Registration failed.';
+      const message = error.response?.data?.message || error.message || 'Registration failed.';
       return { success: false, message };
     }
   };
